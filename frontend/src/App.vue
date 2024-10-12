@@ -1,15 +1,15 @@
 <script setup lang="ts">
-  import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
-    </div>
-  </header>
-
-  <RouterView />
+  <div class="px-4">
+    <header>
+        <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
+    </header>
+    
+    <RouterView />
+  </div>
 </template>
 
 <style scoped>
