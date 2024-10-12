@@ -33,7 +33,7 @@ async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-@app.post("/users/", response_model=UserCreate)
+@app.post("/users/create", response_model=UserCreate)
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).filter(User.email == user.email))
     existing_user = result.scalar_one_or_none()
@@ -46,6 +46,17 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(new_user) 
     return new_user
+
+@app.post("/users/by-name/", response_model=UserCreate)
+async def get_user_by_name(user: dict[str, str], db: AsyncSession = Depends(get_db)):
+    query = select(User).filter(User.name == user.get('name'))
+    result = await db.execute(query)
+    existing_user = result.scalar_one_or_none()
+
+    if not existing_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return existing_user
 
 @app.get("/")
 async def root():
