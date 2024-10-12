@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "frontend:install": "npm --prefix frontend install",
+    "backend:install": "cd backend && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
+    "install": "npm run frontend:install && npm run backend:install",
     "frontend": "npm --prefix frontend run dev",
     "backend": "cd backend && uvicorn main:app --reload",
     "start": "concurrently \"npm run frontend\" \"npm run backend\""
