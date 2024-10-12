@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import Toaster from '@/components/ui/toast/Toaster.vue'
 </script>
 
 <template>
   <div class="px-4">
     <header>
-        <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
+      <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
     </header>
     
-    <RouterView />
+    <div class="flex min-h-screen justify-center py-2">
+      <RouterView />
+    </div>
+    
+    <Toaster />
+    <footer>
+
+    </footer>
   </div>
 </template>
 
