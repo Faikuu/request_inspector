@@ -29,6 +29,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def get_current_token(token: str = Depends(oauth2_scheme)):
     try:
+        print(token)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         resource_id = payload.get("sub")
         if resource_id is None:

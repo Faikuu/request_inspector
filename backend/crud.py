@@ -17,6 +17,13 @@ async def get_user_by_name(db: AsyncSession, name: str):
     result = await db.execute(select(User).filter(User.name == name))
     return result.scalar_one_or_none()
 
+async def create_resource(db: AsyncSession, resource):
+    new_resource = Resource(password=resource.password)
+    db.add(new_resource)
+    await db.commit()
+    await db.refresh(new_resource)
+    return new_resource
+
 async def get_resource_by_id(db: AsyncSession, resource_id: int):
     result = await db.execute(select(Resource).filter(Resource.id == resource_id))
     return result.scalar_one_or_none()

@@ -4,6 +4,9 @@ class UserCreate(BaseModel):
     name: str
     email: str
 
+class ResourceCreate(BaseModel):
+    password: str
+
 class Resource(BaseModel):
     id: int
     content: str

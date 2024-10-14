@@ -9,6 +9,5 @@ class User(Base):
 
 class Resource(Base):
     __tablename__ = 'resources'
-    id = Column(Integer, primary_key=True, index=True)
-    content = Column(String)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     password = Column(String)

@@ -5,7 +5,8 @@ from datetime import timedelta
 from database import get_db
 from auth import create_access_token, verify_password, get_current_token, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from crud import get_resource_by_id, verify_resource_password
-from schemas import Token
+from schemas import Token, ResourceCreate
+from models import Resource
 
 router = APIRouter()
 
@@ -21,11 +22,9 @@ async def generate_token(resource_id: int, password: str, db: AsyncSession = Dep
     access_token = create_access_token(data={"sub": str(resource_id)}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/resource/{resource_id}")
-async def get_resource(resource_id: int, token: str = Depends(get_current_token), db: AsyncSession = Depends(get_db)):
+@router.get("/{resource_id}")
+async def get_resource(resource_id: int, token_resource_id: str = Depends(get_current_token), db: AsyncSession = Depends(get_db)):
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        token_resource_id = payload.get("sub")
         if str(resource_id) != token_resource_id:
             raise HTTPException(status_code=403, detail="Invalid token")
     except JWTError:
@@ -35,4 +34,13 @@ async def get_resource(resource_id: int, token: str = Depends(get_current_token)
     if not resource:
         raise HTTPException(status_code=404, detail="Resource not found")
     
-    return {"content": resource.content}
+    return {"content": resource.id}
+
+@router.post("/create", response_model=Token)
+async def create_resource(resource: ResourceCreate, db: AsyncSession = Depends(get_db)):
+    new_resource = Resource(password=resource.password)
+    db.add(new_resource)
+    await db.commit()
+    await db.refresh(new_resource)
+    access_token = create_access_token(data={"sub": str(new_resource.id)}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    return {"access_token": access_token, "token_type": "bearer"}
