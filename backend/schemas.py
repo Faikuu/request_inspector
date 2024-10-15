@@ -7,6 +7,10 @@ class UserCreate(BaseModel):
 class ResourceCreate(BaseModel):
     password: str
 
+class TokenRequest(BaseModel):
+    resource_id: int
+    password: str
+
 class Resource(BaseModel):
     id: int
     content: str

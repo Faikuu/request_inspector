@@ -1,65 +1,55 @@
-<script setup lang="ts">
-import { h } from 'vue'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
-import * as z from 'zod'
-
-import { Button } from '@/components/ui/button'
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { toast } from '@/components/ui/toast'
-
-const formSchema = toTypedSchema(z.object({
-  username: z.string().min(2).max(50),
-}))
-
-const { handleSubmit } = useForm({
-  validationSchema: formSchema,
-})
-
-const onSubmit = handleSubmit(async (values) => {
-  var user = {
-    name: values.username
-  }
-  const response = await fetch('/api/users/by-name/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user),
-  })
-
-  const data = await response.json()
-  toast({
-    title: 'You received the following values:',
-    description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' }, h('code', { class: 'text-white' }, JSON.stringify(data, null, 2))),
-  })
-})
-</script>
-
 <template>
-  <form class="w-2/3 space-y-6 flex flex-col items-center" @submit="onSubmit">
-    <FormField v-slot="{ componentField }" name="username">
-      <FormItem>
-        <FormLabel>Username</FormLabel>
-        <FormControl>
-          <Input type="text" placeholder="shadcn" v-bind="componentField" />
-        </FormControl>
-        <FormDescription>
-          This is your public display name.
-        </FormDescription>
-        <FormMessage />
-      </FormItem>
-    </FormField>
-    <Button class="w-1/2" type="submit">
-      Submit
-    </Button>
-  </form>
+  <div>
+    <h1>Resource {{ id }}</h1>
+    
+    <form @submit.prevent="submitForm">
+      <label for="password">Password:</label>
+      <Input
+        type="password"
+        v-model="password"
+        required
+      />
+      <Button type="submit">Submit</Button>
+    </form>
+
+    <p v-if="errorMessage">{{ errorMessage }}</p>
+  </div>
 </template>
+
+<script setup>
+import Button from '@/components/ui/button/Button.vue';
+import Input from '@/components/ui/input/Input.vue';
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const id = route.params.id
+
+// Define reactive state variables
+const password = ref('')
+const errorMessage = ref('')
+
+// Form submission logic
+const submitForm = async () => {
+  try {
+    // const response = await fetch(`/api/resources/${id}`, {
+    const response = await fetch(`/api/resources/token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "resource_id": id, "password": password.value })
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to submit. Please try again.')
+    }
+
+    const data = await response.json()
+    // Handle the response (e.g., show a success message or navigate elsewhere)
+    console.log('Response data:', data)
+  } catch (error) {
+    errorMessage.value = error.message
+  }
+}
+</script>
