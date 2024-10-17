@@ -18,7 +18,7 @@ async def generate_token(requested_resource: TokenRequest, db: AsyncSession = De
         raise HTTPException(status_code=400, detail="Invalid resource ID or password")
 
     access_token = create_access_token(data={"sub": str(requested_resource.resource_uuid)}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"uuid": resource.uuid, "access_token": access_token, "token_type": "bearer"}
 
 @router.get("/{resource_uuid}")
 async def get_resource(resource_uuid: str, token_resource_uuid: str = Depends(get_current_token), db: AsyncSession = Depends(get_db)):
@@ -46,4 +46,4 @@ async def create_resource(resource: ResourceCreate, db: AsyncSession = Depends(g
     await db.commit()
     await db.refresh(new_resource)
     access_token = create_access_token(data={"sub": str(new_resource.uuid)}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"uuid": new_resource.uuid, "access_token": access_token, "token_type": "bearer"}

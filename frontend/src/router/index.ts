@@ -20,7 +20,7 @@ const router = createRouter({
       component: () => import('../views/NewInspectorView.vue'),
     },
     {
-      path: '/inspector/:id',
+      path: '/inspector/:uuid',
       name: 'inspector-existing',
       component: () => import('../views/ExistingInspectorView.vue'),
     },

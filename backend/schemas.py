@@ -17,5 +17,6 @@ class Resource(BaseModel):
     password: str
 
 class Token(BaseModel):
+    uuid: str
     access_token: str
     token_type: str
