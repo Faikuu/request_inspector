@@ -28,8 +28,12 @@ async def get_resource_by_id(db: AsyncSession, resource_id: int):
     result = await db.execute(select(Resource).filter(Resource.id == resource_id))
     return result.scalar_one_or_none()
 
-async def verify_resource_password(db: AsyncSession, resource_id: int, password: str, verify_password_func):
-    resource = await get_resource_by_id(db, resource_id)
+async def get_resource_by_uuid(db: AsyncSession, resource_uuid: int):
+    result = await db.execute(select(Resource).filter(Resource.uuid == resource_uuid))
+    return result.scalar_one_or_none()
+
+async def verify_resource_password(db: AsyncSession, resource_uuid: str, password: str, verify_password_func):
+    resource = await get_resource_by_uuid(db, resource_uuid)
     if not resource or not verify_password_func(password, resource.password):
         return None
     return resource

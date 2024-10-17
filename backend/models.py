@@ -10,4 +10,5 @@ class User(Base):
 class Resource(Base):
     __tablename__ = 'resources'
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    uuid = Column(String, unique=True, index=True)
     password = Column(String)

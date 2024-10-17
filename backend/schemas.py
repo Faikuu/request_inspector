@@ -7,11 +7,16 @@ class UserCreate(BaseModel):
 class ResourceCreate(BaseModel):
     password: str
 
+class TokenRequest(BaseModel):
+    resource_uuid: str
+    password: str
+
 class Resource(BaseModel):
     id: int
-    content: str
+    uuid: str
     password: str
 
 class Token(BaseModel):
+    uuid: str
     access_token: str
     token_type: str

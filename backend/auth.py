@@ -29,11 +29,10 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 async def get_current_token(token: str = Depends(oauth2_scheme)):
     try:
-        print(token)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        resource_id = payload.get("sub")
-        if resource_id is None:
+        resource_uuid = payload.get("sub")
+        if resource_uuid is None:
             raise HTTPException(status_code=403, detail="Invalid token")
-        return resource_id
+        return resource_uuid
     except JWTError:
         raise HTTPException(status_code=403, detail="Could not validate credentials")
