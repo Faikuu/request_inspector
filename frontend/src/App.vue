@@ -9,7 +9,7 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
       <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
     </header>
     
-    <div class="flex min-h-screen justify-center py-2">
+    <div class="flex min-h-screen justify-center py-2 items-center">
       <RouterView />
     </div>
     

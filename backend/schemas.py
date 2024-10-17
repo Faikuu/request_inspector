@@ -8,12 +8,12 @@ class ResourceCreate(BaseModel):
     password: str
 
 class TokenRequest(BaseModel):
-    resource_id: int
+    resource_uuid: str
     password: str
 
 class Resource(BaseModel):
     id: int
-    content: str
+    uuid: str
     password: str
 
 class Token(BaseModel):
