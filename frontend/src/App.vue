@@ -9,7 +9,7 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
       <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
     </header>
     
-    <div class="flex min-h-screen justify-center py-2 items-center">
+    <div class="flex min-h-screen justify-center py-2 items-center fade-in">
       <RouterView />
     </div>
     
@@ -21,6 +21,17 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 </template>
 
 <style scoped>
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
