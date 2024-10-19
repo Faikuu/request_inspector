@@ -17,14 +17,15 @@ const router = createRouter({
     {
       path: '/inspector/new',
       name: 'inspector-new',
-      component: () => import('../views/NewInspectorView.vue'),
+      component: () => import('@/views/NewInspectorView.vue' as any),
     },
     {
       path: '/inspector/:uuid',
       name: 'inspector-existing',
-      component: () => import('../views/ExistingInspectorView.vue'),
+      component: () => import('@/views/ExistingInspectorView.vue' as any),
     },
   ],
 })
 
 export default router
+
