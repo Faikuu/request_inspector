@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 from datetime import timedelta
 from database import get_db
+from connection_manager import ConnectionManager
 from auth import create_access_token, verify_password, get_current_token, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
 from crud import get_resource_by_id, get_resource_by_uuid, verify_resource_password
 from schemas import Token, ResourceCreate, TokenRequest
@@ -10,6 +11,7 @@ from models import Resource
 import uuid
 
 router = APIRouter()
+manager = ConnectionManager()
 
 @router.post("/token", response_model=Token)
 async def generate_token(requested_resource: TokenRequest, db: AsyncSession = Depends(get_db)):
@@ -18,6 +20,7 @@ async def generate_token(requested_resource: TokenRequest, db: AsyncSession = De
         raise HTTPException(status_code=400, detail="Invalid resource ID or password")
 
     access_token = create_access_token(data={"sub": str(requested_resource.resource_uuid)}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    await manager.send_text(resource.uuid, f"Message from client: {access_token}")
     return {"uuid": resource.uuid, "access_token": access_token, "token_type": "bearer"}
 
 @router.get("/{resource_uuid}")
