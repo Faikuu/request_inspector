@@ -68,6 +68,21 @@ onMounted(async () => {
       return
     }
     resource.value = data.content
+
+    const token = document.cookie.match(/access_token=([^;]+)/)?.[1]
+    var socket = new WebSocket(`ws://localhost:5173/api/ws/?access_token=${token}`)
+    socket.onopen = () => {
+      console.log('WebSocket connection established')
+    }
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error)
+    }
+    socket.onmessage = (event) => {
+      console.log('WebSocket message received:', event.data)
+    }
+    socket.onclose = () => {
+      console.log('WebSocket connection closed')
+    }
   } catch (error) {
     console.error('Failed to fetch resource:', error)
   }
