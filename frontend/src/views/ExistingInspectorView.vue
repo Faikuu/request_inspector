@@ -14,7 +14,17 @@
 
     <p v-if="errorMessage">{{ errorMessage }}</p>
   </div>
-  <div v-else v-html="resource"></div>
+  <div v-else>
+    <div>
+      <h1>Resource {{ uuid }}</h1>
+
+      <div>
+        <div v-for="child in resourceContent" :key="child.id">
+          {{ child.name }}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -31,6 +41,8 @@ const uuid = route.params.uuid
 const password = ref('')
 const errorMessage = ref('')
 const resource = ref('')
+// const resourceContent = ref('')
+const resourceContent = ref([{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }])
 
 const submitForm = async () => {
   try {
