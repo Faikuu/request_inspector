@@ -6,7 +6,7 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 <template>
   <div class="px-4 bg-indigo-200">
     <header>
-      <div class="w-full h-16 mt-4 bg-white rounded-full">
+      <div class="min-w-[320px] max-w-[80%] h-16 my-4 bg-indigo-100 drop-shadow-sm rounded-full">
 
       </div>
       <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
