@@ -1,6 +1,6 @@
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import User, Resource
+from models import User, Resource, ResourceLog
 
 async def get_user_by_email(db: AsyncSession, email: str):
     result = await db.execute(select(User).filter(User.email == email))
@@ -37,3 +37,7 @@ async def verify_resource_password(db: AsyncSession, resource_uuid: str, passwor
     if not resource or not verify_password_func(password, resource.password):
         return None
     return resource
+
+async def get_resource_history(db: AsyncSession, resource_id: int):
+    result = await db.execute(select(ResourceLog).filter(ResourceLog.resource_id == resource_id).order_by(ResourceLog.timestamp.desc()))
+    return result.scalars().all()

@@ -16,13 +16,58 @@
   </div>
   <div v-else>
     <div>
-      <h1>Resource {{ uuid }}</h1>
+      <h1 class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-r from-white to-indigo-300 text-transparent bg-clip-text drop-shadow-md">
+        <span>
+          Inspector 
+        </span>
+        <span>
+          {{ uuid }}
+        </span>
+      </h1>
 
-      <div>
-        <div v-for="child in resourceContent" :key="child.id">
-          {{ child.name }}
-        </div>
-      </div>
+      <Tabs defaultValue="realtime" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="realtime">Realtime</TabsTrigger>
+          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="realtime">
+          <div class="flex flex-col-reverse">
+            <div v-if="realTimeContent.length > 0" class="bg-gray-700 rounded-lg mt-4 p-4" v-for="child in realTimeContent" :key="child.id">
+              {{ child.content }}
+            </div>
+            <div v-else class="bg-gray-700 rounded-lg mt-4 p-4 flex items-center">
+              <svg class="mr-2 animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Waiting for requests...
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="history">
+          <div class="flex flex-col-reverse">
+            <div v-if="historyContent.length > 0" class="bg-gray-700 rounded-lg mt-4 p-4" v-for="child in historyContent" :key="child.id">
+              {{ child.content }}
+            </div>
+            <div v-else class="bg-gray-700 rounded-lg mt-4 p-4 flex items-center">
+              <svg class="mr-2 animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Waiting for history...
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="settings">
+          <div class="bg-gray-700 rounded-lg mt-6 p-4 flex items-center">
+            <svg class="mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path class="opacity-75" fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 3h-2v2h2V5zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zM4 12h2v2H4v-2zm0 4h2v2H4v-2zM4 18h2v2H4v-2zM16 20h2v2h-2v-2zM16 6h2v2h-2V6zm0 10h2v2h-2v-2zM16 2h2v2h-2V2z"></path>
+            </svg>
+            Settings placeholder
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   </div>
 </template>
@@ -31,8 +76,10 @@
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import axios from 'axios'
+import { Tabs, TabsContent, TabsTrigger } from '@/components/ui/tabs'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import TabsList from '@/components/ui/tabs/TabsList.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -41,8 +88,8 @@ const uuid = route.params.uuid
 const password = ref('')
 const errorMessage = ref('')
 const resource = ref('')
-// const resourceContent = ref('')
-const resourceContent = ref([{ id: 1, name: 'Foo' }, { id: 2, name: 'Bar' }])
+const realTimeContent = ref([])
+const historyContent = ref([])
 
 const submitForm = async () => {
   try {
@@ -81,6 +128,14 @@ onMounted(async () => {
     }
     resource.value = data.content
 
+    const historyResponse = await axios.get(`/api/resources/history/${uuid}`)
+    const historyData = await historyResponse.data
+    if (!historyData) {
+      return
+    }
+    historyContent.value = historyData
+    // console.log(historyContent.value);
+
     const token = document.cookie.match(/access_token=([^;]+)/)?.[1]
     var socket = new WebSocket(`ws://localhost:5173/api/ws/?access_token=${token}`)
     socket.onopen = () => {
@@ -91,6 +146,7 @@ onMounted(async () => {
     }
     socket.onmessage = (event) => {
       console.log('WebSocket message received:', event.data)
+      realTimeContent.value = [...realTimeContent.value, { id: realTimeContent.value.length + 1, content: event.data }]
     }
     socket.onclose = () => {
       console.log('WebSocket connection closed')

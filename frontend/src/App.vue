@@ -4,13 +4,18 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 </script>
 
 <template>
-  <div class="px-4">
+  <div class="px-4 bg-indigo-200">
     <header>
+      <div class="w-full h-16 mt-4 bg-white rounded-full">
+
+      </div>
       <!-- <font-awesome-icon :icon="['fas', 'chevron-up']" /> -->
     </header>
     
     <div class="flex min-h-screen justify-center py-2 items-center fade-in">
-      <RouterView />
+      <div class="min-w-[320px] max-w-[80%] p-4 bg-gradient-to-b from-slate-500 to-indigo-300 shadow-md rounded-lg">
+        <RouterView />
+      </div>
     </div>
     
     <Toaster />
