@@ -6,9 +6,10 @@ from database import get_db
 from connection_manager import ConnectionManager
 from auth import create_access_token, verify_password, get_current_token, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
 from crud import get_resource_by_id, get_resource_by_uuid, verify_resource_password
-from schemas import Token, ResourceCreate, TokenRequest
-from models import Resource
+from schemas import Token, ResourceCreate, TokenRequest, ResourceLogCreate
+from models import Resource, ResourceLog
 import uuid
+import time
 
 router = APIRouter()
 manager = ConnectionManager()
@@ -50,3 +51,13 @@ async def create_resource(resource: ResourceCreate, db: AsyncSession = Depends(g
     await db.refresh(new_resource)
     access_token = create_access_token(data={"sub": str(new_resource.uuid)}, expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     return {"uuid": new_resource.uuid, "access_token": access_token, "token_type": "bearer"}
+
+@router.post("/log")
+async def log_to_resource(resource_log_create: ResourceLogCreate, token_resource_uuid: str = Depends(get_current_token), db: AsyncSession = Depends(get_db)):
+    resource = await get_resource_by_uuid(db, token_resource_uuid)
+    new_resource_log = ResourceLog(resource_id = resource.id, content = resource_log_create.content, timestamp = int(time.time()))
+    db.add(new_resource_log)
+    await db.commit()
+    await db.refresh(new_resource_log)
+    await manager.send_text(token_resource_uuid, resource_log_create.content)
+    return {"content": "ok"}
