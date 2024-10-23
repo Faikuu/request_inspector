@@ -1,20 +1,36 @@
 <template>
-  <div v-if="!resource">
-    <h1>Resource {{ uuid }}</h1>
+  <div v-if="!resource" class="flex flex-col items-center p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Resource {{ uuid }}</h1>
     
-    <form @submit.prevent="submitForm">
-      <label for="password">Password:</label>
-      <Input
-        type="password"
-        v-model="password"
-        required
-      />
-      <Button type="submit">Submit</Button>
+    <form @submit.prevent="submitForm" class="w-full max-w-sm space-y-4">
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+        <Input
+          type="password"
+          v-model="password"
+          required
+          class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+      </div>
+      <Button type="submit" class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-md">Submit</Button>
     </form>
 
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    <p v-if="errorMessage" class="mt-4 text-sm text-red-500">{{ errorMessage }}</p>
   </div>
   <div v-else>
+    <div class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-r from-white to-indigo-300 text-transparent bg-clip-text drop-shadow-md">
+      <span>
+        To send request, use
+      </span>
+      <div class="bg-gray-700 rounded-lg mt-4 p-4 flex items-center w-full">
+        <span class="text-white text-lg break-all">
+          curl -X POST http://localhost:5173/api/resources/log \
+-H "Authorization: Bearer {{ access_token }}" \
+-H "Content-Type: application/json" \
+-d '{"content":"Your message"}'
+        </span>
+      </div>
+    </div>
     <div>
       <h1 class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-r from-white to-indigo-300 text-transparent bg-clip-text drop-shadow-md">
         <span>
