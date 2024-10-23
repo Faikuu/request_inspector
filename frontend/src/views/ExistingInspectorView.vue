@@ -23,12 +23,14 @@
         To send request, use
       </span>
       <div class="bg-gray-700 rounded-lg mt-4 p-4 flex items-center w-full">
-        <span class="text-white text-lg break-all">
-          curl -X POST http://localhost:5173/api/resources/log \
--H "Authorization: Bearer {{ access_token }}" \
--H "Content-Type: application/json" \
--d '{"content":"Your message"}'
-        </span>
+        <pre class="text-white text-lg break-all whitespace-pre-wrap">
+          <code>
+            <span style="color: #ff79c6;">curl</span> <span style="color: #8be9fd;">-X POST</span> <span style="color: #50fa7b;">{{ host }}/api/resources/log</span> \
+<span style="color: #bd93f9;">-H</span> <span style="color: #f1fa8c;">"Authorization: {{ axios.defaults.headers.common['Authorization'] }}"</span> \
+<span style="color: #bd93f9;">-H</span> <span style="color: #f1fa8c;">"Content-Type: application/json"</span> \
+<span style="color: #bd93f9;">-d</span> <span style="color: #f1fa8c;">'{"content":"Your message"}'</span>
+          </code>
+        </pre>
       </div>
     </div>
     <div>
@@ -48,8 +50,13 @@
         </TabsList>
         <TabsContent value="realtime">
           <div class="flex flex-col-reverse max-h-[400px] overflow-y-auto">
-            <div v-if="realTimeContent.length > 0" class="bg-gray-700 rounded-lg mt-4 p-4" v-for="child in realTimeContent" :key="child.id">
-              {{ child.content }}
+            <div v-if="realTimeContent.length > 0" class="flex justify-between bg-gray-700 rounded-lg mt-4 p-4" v-for="child in realTimeContent" :key="child.id">
+              <span>
+                {{ child.content }}
+              </span>
+              <span>
+                {{ new Date(child.timestamp).toLocaleString() }}
+              </span>
             </div>
             <div v-else class="bg-gray-700 rounded-lg mt-4 p-4 flex items-center">
               <svg class="mr-2 animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -62,8 +69,13 @@
         </TabsContent>
         <TabsContent value="history">
           <div class="max-h-[400px] overflow-y-auto">
-            <div v-if="historyContent.length > 0" class="bg-gray-700 rounded-lg mt-4 p-4" v-for="child in historyContent" :key="child.id">
-              {{ child.content }}
+            <div v-if="historyContent.length > 0" class="flex justify-between bg-gray-700 rounded-lg mt-4 p-4" v-for="child in historyContent" :key="child.id">
+              <span>
+                {{ child.content }}
+              </span>
+              <span>
+                {{ new Date(child.timestamp * 1000).toLocaleString() }}
+              </span>
             </div>
             <div v-else class="bg-gray-700 rounded-lg mt-4 p-4 flex items-center">
               <svg class="mr-2 animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -87,11 +99,14 @@ import { Tabs, TabsContent, TabsTrigger } from '@/components/ui/tabs'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import TabsList from '@/components/ui/tabs/TabsList.vue';
+import { timestamp } from '@vueuse/core';
 
 const route = useRoute()
 const router = useRouter()
 const uuid = route.params.uuid
 
+
+const host = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const resource = ref('')
@@ -122,6 +137,7 @@ const submitForm = async () => {
 }
 
 onMounted(async () => {
+  host.value = window.location.protocol + '//' + window.location.host
   const token = document.cookie.match(/access_token=([^;]+)/)?.[1]
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -144,7 +160,7 @@ onMounted(async () => {
     // console.log(historyContent.value);
 
     const token = document.cookie.match(/access_token=([^;]+)/)?.[1]
-    var socket = new WebSocket(`ws://localhost:5173/api/ws/?access_token=${token}`)
+    var socket = new WebSocket(`ws://${window.location.host}/api/ws/?access_token=${token}`)
     socket.onopen = () => {
       console.log('WebSocket connection established')
     }
@@ -153,7 +169,7 @@ onMounted(async () => {
     }
     socket.onmessage = (event) => {
       console.log('WebSocket message received:', event.data)
-      realTimeContent.value = [...realTimeContent.value, { id: realTimeContent.value.length + 1, content: event.data }]
+      realTimeContent.value = [...realTimeContent.value, { id: realTimeContent.value.length + 1, content: event.data, timestamp: timestamp() }]
     }
     socket.onclose = () => {
       console.log('WebSocket connection closed')
@@ -162,4 +178,5 @@ onMounted(async () => {
     console.error('Failed to fetch resource:', error)
   }
 })
+
 </script>
