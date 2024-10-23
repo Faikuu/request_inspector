@@ -45,8 +45,18 @@
 
       <Tabs defaultValue="realtime" className="w-full">
         <TabsList className="grid w-full grid-cols-2 hover:cursor-pointer text-black bg-gray-200 p-2 rounded-md">
-          <TabsTrigger value="realtime">Realtime</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
+          <TabsTrigger value="realtime">
+            <span>
+              Realtime
+            </span>
+            <font-awesome-icon icon="fa-solid fa-chart-line" class="ml-2" />
+          </TabsTrigger>
+          <TabsTrigger value="history">
+            <span>
+              History
+            </span>
+            <font-awesome-icon icon="fa-solid fa-clock-rotate-left" class="ml-2" />
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="realtime">
           <div class="flex flex-col-reverse max-h-[400px] overflow-y-auto">
