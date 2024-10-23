@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/inspector/',
+      name: 'inspector-search',
+      component: () => import('@/views/SearchInspectorView.vue' as any),
+    },
+    {
       path: '/inspector/new',
       name: 'inspector-new',
       component: () => import('@/views/NewInspectorView.vue' as any),

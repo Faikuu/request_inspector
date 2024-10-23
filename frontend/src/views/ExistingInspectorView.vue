@@ -17,8 +17,8 @@
 
     <p v-if="errorMessage" class="mt-4 text-sm text-red-500">{{ errorMessage }}</p>
   </div>
-  <div v-else>
-    <div class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-r from-white to-indigo-300 text-transparent bg-clip-text drop-shadow-md">
+  <div v-else class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-b from-gray-500 to-gray-700 text-transparent bg-clip-text drop-shadow-md">
       <span>
         To send request, use
       </span>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div>
-      <h1 class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-r from-white to-indigo-300 text-transparent bg-clip-text drop-shadow-md">
+      <h1 class="flex flex-col justify-center items-center mb-4 text-3xl font-bold bg-gradient-to-b from-gray-500 to-gray-700 text-transparent bg-clip-text drop-shadow-md">
         <span>
           Inspector 
         </span>
@@ -42,13 +42,12 @@
       </h1>
 
       <Tabs defaultValue="realtime" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2 hover:cursor-pointer text-black bg-gray-200 p-2 rounded-md">
           <TabsTrigger value="realtime">Realtime</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         <TabsContent value="realtime">
-          <div class="flex flex-col-reverse">
+          <div class="flex flex-col-reverse max-h-[400px] overflow-y-auto">
             <div v-if="realTimeContent.length > 0" class="bg-gray-700 rounded-lg mt-4 p-4" v-for="child in realTimeContent" :key="child.id">
               {{ child.content }}
             </div>
@@ -62,7 +61,7 @@
           </div>
         </TabsContent>
         <TabsContent value="history">
-          <div class="flex flex-col-reverse">
+          <div class="max-h-[400px] overflow-y-auto">
             <div v-if="historyContent.length > 0" class="bg-gray-700 rounded-lg mt-4 p-4" v-for="child in historyContent" :key="child.id">
               {{ child.content }}
             </div>
@@ -73,14 +72,6 @@
               </svg>
               Waiting for history...
             </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="settings">
-          <div class="bg-gray-700 rounded-lg mt-6 p-4 flex items-center">
-            <svg class="mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <path class="opacity-75" fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 3h-2v2h2V5zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zM4 12h2v2H4v-2zm0 4h2v2H4v-2zM4 18h2v2H4v-2zM16 20h2v2h-2v-2zM16 6h2v2h-2V6zm0 10h2v2h-2v-2zM16 2h2v2h-2V2z"></path>
-            </svg>
-            Settings placeholder
           </div>
         </TabsContent>
       </Tabs>
