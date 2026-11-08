@@ -1,16 +1,16 @@
-version: '3.8'
-
+# Optional PostgreSQL for the API. The default setup uses SQLite and does not need this.
+# Set POSTGRES_PASSWORD in a repo-root .env file before running `docker compose up`.
 services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_USER: ${POSTGRES_USER:-request_inspector}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in a .env file}
+      POSTGRES_DB: ${POSTGRES_DB:-request_inspector}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
 
 volumes:
   postgres_data:

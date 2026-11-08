@@ -59,3 +59,14 @@ venv/
 
 # Pyre type checker
 .pyre/
+# Local SQLite databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# pytest
+.pytest_cache/
+
+# Keep the template (overrides the .env.* rule above)
+!.env.example

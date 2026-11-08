@@ -3,17 +3,20 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "setup": "npm install && npm run frontend:install && npm run backend:install",
     "frontend:install": "npm --prefix frontend install",
-    "backend:install": "cd backend && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
-    "install": "npm run frontend:install && npm run backend:install",
+    "backend:install": "cd backend && python3 -m venv venv && . venv/bin/activate && pip install -r requirements-dev.txt",
     "frontend": "npm --prefix frontend run dev",
-    "backend": "cd backend && uvicorn main:app --reload",
-    "start": "cd backend && source venv/bin/activate && cd .. && concurrently \"docker compose up\" \"npm run frontend\" \"npm run backend\""
+    "backend": "cd backend && . venv/bin/activate && uvicorn app.main:app --reload",
+    "start": "concurrently -n api,web \"npm run backend\" \"npm run frontend\"",
+    "build": "npm --prefix frontend run build",
+    "test": "npm run backend:test && npm --prefix frontend run type-check",
+    "backend:test": "cd backend && . venv/bin/activate && pytest -q"
   },
   "keywords": [],
   "author": "Faiku",
   "license": "ISC",
-  "description": "",
+  "description": "Catch and inspect HTTP requests and webhooks in a private, password-protected inbox.",
   "devDependencies": {
     "concurrently": "^9.0.1"
   }
