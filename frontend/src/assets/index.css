@@ -1,84 +1,78 @@
+@import '@fontsource-variable/schibsted-grotesk';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
 @layer base {
+  /* Airmail palette — values are space-separated RGB channels. */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-  
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-  
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-  
-    --primary: 0 72.2% 50.6%;
-    --primary-foreground: 0 85.7% 97.3%;
-  
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-  
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-  
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-  
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-  
-    --border:0 0% 89.8%;
-    --input:0 0% 89.8%;
-    --ring:0 72.2% 50.6%;
-    --radius: 0.5rem;
+    --paper: 238 241 244; /* #EEF1F4 airmail paper */
+    --sheet: 250 251 252; /* raised surface */
+    --ink: 27 42 65; /* #1B2A41 ink navy */
+    --ink-soft: 82 96 117;
+    --rule: 205 213 223;
+    --airmail-red: 200 50 60; /* #C8323C */
+    --airmail-blue: 42 91 168; /* #2A5BA8 */
+    --live: 31 138 112; /* #1F8A70 */
+    --code-bg: 27 42 65;
+    --code-ink: 230 235 242;
+    --method-get: 42 91 168;
+    --method-post: 31 138 112;
+    --method-put: 176 112 18;
+    --method-patch: 122 74 168;
+    --method-delete: 200 50 60;
+    --method-other: 82 96 117;
+    color-scheme: light;
   }
-   
+
   .dark {
-    --background:0 0% 3.9%;
-    --foreground:0 0% 98%;
-  
-    --card:0 0% 3.9%;
-    --card-foreground:0 0% 98%;
-  
-    --popover:0 0% 3.9%;
-    --popover-foreground:0 0% 98%;
-  
-    --primary:0 72.2% 50.6%;
-    --primary-foreground:0 85.7% 97.3%;
-  
-    --secondary:0 0% 14.9%;
-    --secondary-foreground:0 0% 98%;
-  
-    --muted:0 0% 14.9%;
-    --muted-foreground:0 0% 63.9%;
-  
-    --accent:0 0% 14.9%;
-    --accent-foreground:0 0% 98%;
-  
-    --destructive:0 62.8% 30.6%;
-    --destructive-foreground:0 0% 98%;
-  
-    --border:0 0% 14.9%;
-    --input:0 0% 14.9%;
-    --ring:0 72.2% 50.6%;
+    --paper: 15 26 43; /* #0F1A2B night desk */
+    --sheet: 23 37 58;
+    --ink: 230 235 242; /* #E6EBF2 */
+    --ink-soft: 150 165 186;
+    --rule: 44 62 88;
+    --airmail-red: 228 88 96;
+    --airmail-blue: 104 150 222;
+    --live: 70 196 160;
+    --code-bg: 9 17 29;
+    --code-ink: 220 228 240;
+    --method-get: 104 150 222;
+    --method-post: 70 196 160;
+    --method-put: 224 168 72;
+    --method-patch: 176 140 226;
+    --method-delete: 228 88 96;
+    --method-other: 150 165 186;
+    color-scheme: dark;
   }
-}
 
-.bg-background {
-  background-color: rgb(20,20,20);
-}
-.text-foreground {
-  color: rgb(200,200,200);
-}
-
- 
-@layer base {
   * {
-    @apply border-border;
+    @apply border-rule;
   }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-paper font-sans text-ink antialiased;
+    font-feature-settings: 'ss01';
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-airmail-blue ring-offset-2 ring-offset-paper;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

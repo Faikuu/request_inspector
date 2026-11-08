@@ -1,91 +1,60 @@
-const animate = require("tailwindcss-animate")
+const animate = require('tailwindcss-animate')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
-  safelist: ["dark"],
-  prefix: "",
-  
-  content: [
-    './pages/**/*.{ts,tsx,vue}',
-    './components/**/*.{ts,tsx,vue}',
-    './app/**/*.{ts,tsx,vue}',
-    './src/**/*.{ts,tsx,vue}',
-	],
-  
+  darkMode: ['class'],
+  content: ['./index.html', './src/**/*.{ts,tsx,vue}'],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
     extend: {
+      fontFamily: {
+        sans: ['"Schibsted Grotesk Variable"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        // Airmail palette (semantic). Use these names in components.
+        paper: 'rgb(var(--paper) / <alpha-value>)', // page background
+        sheet: 'rgb(var(--sheet) / <alpha-value>)', // raised surfaces (panels, inputs)
+        ink: 'rgb(var(--ink) / <alpha-value>)', // primary text
+        'ink-soft': 'rgb(var(--ink-soft) / <alpha-value>)', // secondary text
+        rule: 'rgb(var(--rule) / <alpha-value>)', // borders / dividers
+        airmail: {
+          red: 'rgb(var(--airmail-red) / <alpha-value>)',
+          blue: 'rgb(var(--airmail-blue) / <alpha-value>)',
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+        live: 'rgb(var(--live) / <alpha-value>)',
+        code: 'rgb(var(--code-bg) / <alpha-value>)', // code block background
+        'code-ink': 'rgb(var(--code-ink) / <alpha-value>)',
+        method: {
+          get: 'rgb(var(--method-get) / <alpha-value>)',
+          post: 'rgb(var(--method-post) / <alpha-value>)',
+          put: 'rgb(var(--method-put) / <alpha-value>)',
+          patch: 'rgb(var(--method-patch) / <alpha-value>)',
+          delete: 'rgb(var(--method-delete) / <alpha-value>)',
+          other: 'rgb(var(--method-other) / <alpha-value>)',
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+        // shadcn-compatible aliases used by components/ui/*
+        border: 'rgb(var(--rule) / <alpha-value>)',
+        input: 'rgb(var(--rule) / <alpha-value>)',
+        ring: 'rgb(var(--airmail-blue) / <alpha-value>)',
+        background: 'rgb(var(--paper) / <alpha-value>)',
+        foreground: 'rgb(var(--ink) / <alpha-value>)',
+        primary: { DEFAULT: 'rgb(var(--ink) / <alpha-value>)', foreground: 'rgb(var(--paper) / <alpha-value>)' },
+        secondary: { DEFAULT: 'rgb(var(--sheet) / <alpha-value>)', foreground: 'rgb(var(--ink) / <alpha-value>)' },
+        destructive: { DEFAULT: 'rgb(var(--airmail-red) / <alpha-value>)', foreground: '#ffffff' },
+        muted: { DEFAULT: 'rgb(var(--sheet) / <alpha-value>)', foreground: 'rgb(var(--ink-soft) / <alpha-value>)' },
+        accent: { DEFAULT: 'rgb(var(--sheet) / <alpha-value>)', foreground: 'rgb(var(--ink) / <alpha-value>)' },
+        popover: { DEFAULT: 'rgb(var(--sheet) / <alpha-value>)', foreground: 'rgb(var(--ink) / <alpha-value>)' },
+        card: { DEFAULT: 'rgb(var(--sheet) / <alpha-value>)', foreground: 'rgb(var(--ink) / <alpha-value>)' },
       },
       borderRadius: {
-      	xl: "calc(var(--radius) + 4px)",
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: '10px',
+        md: '6px',
+        sm: '4px',
       },
-      keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
-        "collapsible-down": {
-          from: { height: 0 },
-          to: { height: 'var(--radix-collapsible-content-height)' },
-        },
-        "collapsible-up": {
-          from: { height: 'var(--radix-collapsible-content-height)' },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "collapsible-down": "collapsible-down 0.2s ease-in-out",
-        "collapsible-up": "collapsible-up 0.2s ease-in-out",
+      backgroundImage: {
+        // The one bold element: an airmail envelope chevron band.
+        airmail:
+          'repeating-linear-gradient(135deg, rgb(var(--airmail-red)) 0 14px, transparent 14px 22px, rgb(var(--airmail-blue)) 22px 36px, transparent 36px 44px)',
       },
     },
   },
