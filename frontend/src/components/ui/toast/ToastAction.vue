@@ -13,7 +13,7 @@ const delegatedProps = computed(() => {
 </script>
 
 <template>
-  <ToastAction v-bind="delegatedProps" :class="cn('inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive', props.class)">
+  <ToastAction v-bind="delegatedProps" :class="cn('inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-rule bg-transparent px-3 text-sm font-medium text-ink transition-colors hover:bg-paper focus:outline-none focus:ring-2 focus:ring-airmail-blue focus:ring-offset-2 focus:ring-offset-sheet disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-airmail-red group-[.destructive]:text-airmail-red group-[.destructive]:hover:bg-airmail-red group-[.destructive]:hover:text-paper', props.class)">
     <slot />
   </ToastAction>
 </template>

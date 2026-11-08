@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/ri_logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="A private inbox for HTTP requests. Point a webhook or your code at its capture URL and inspect every request live.">
     <title>Request Inspector</title>
+    <script>
+      // Apply the saved theme before first paint to avoid a flash.
+      (function () {
+        try {
+          var t = localStorage.getItem('ri:theme');
+          var dark = t === 'dark' || (t !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {
+          // Storage or matchMedia unavailable: stay in light mode.
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

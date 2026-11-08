@@ -1,39 +1,19 @@
-# vue-project
+# Request Inspector frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Vue 3 + Vite + TypeScript single-page app for the inbox UI. Styling uses Tailwind with the Airmail tokens in `src/assets/index.css`, and components come from radix-vue and lucide-vue-next.
 
-## Recommended IDE Setup
+## Scripts
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- `npm run dev`: start the Vite dev server. `/api` is proxied to `RI_BACKEND_URL` (default `http://localhost:8000`).
+- `npm run build`: type-check with `vue-tsc`, then build to `dist/`.
+- `npm run preview`: serve the production build locally.
+- `npm run lint`: run ESLint with auto-fix.
 
-## Type Support for `.vue` Imports in TS
+## Structure
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- `src/views/`: route pages. `InboxView` is lazy-loaded at `/i/:id`.
+- `src/components/`: app shell (`AppHeader`), shared pieces (`MethodStamp`, `RecentInboxes`), and `ui/` primitives.
+- `src/api/`: typed REST client and wire types that mirror the backend schemas.
+- `src/lib/`: session tokens (sessionStorage), recent inboxes and formatting helpers.
+- `src/composables/`: `useTheme` (light, dark or system, stored in `ri:theme`).
+- `src/router/index.ts`: routes, legacy `/inspector/*` redirects, and page titles.
